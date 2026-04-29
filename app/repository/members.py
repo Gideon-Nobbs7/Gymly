@@ -20,7 +20,6 @@ class MemberRepository(BaseRepository):
         return self.update(member_id, MemberUpdate(status=status))
 
     def member_payments(self, member_id) -> Member | None:
-        member_uuid = uuid.UUID(member_id)
         member = self.read_one(id=member_id)
         if not member.payments:
             raise NotFoundError(

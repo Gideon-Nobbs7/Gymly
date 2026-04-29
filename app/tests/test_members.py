@@ -34,6 +34,7 @@ def test_create_member(client, member_payload):
 
 def test_create_duplicate_member(client, member_payload):
     response1 = client.post(member_base_api, json=member_payload)
+    print(response1.json())
     response2 = client.post(member_base_api, json=member_payload)
     assert response2.status_code == status.HTTP_409_CONFLICT
 
