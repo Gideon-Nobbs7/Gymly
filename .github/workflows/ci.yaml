@@ -11,8 +11,12 @@ jobs:
     lint:
         runs-on: ubuntu-latest
         steps:
+            - name: Checkout Code
+              uses: actions/checkouut@v4
+
             - name: Setup Env
               uses: ./.github/actions/setup-env
+
             - name: Run Lint
               run: ruff check --fix
               shell: bash
@@ -20,8 +24,12 @@ jobs:
     test:
         runs-on: ubuntu-latest
         steps:
+            - name: Checkout Code
+              uses: actions/checkouut@v4
+
             - name: Setup Env
               uses: ./.github/actions/setup-env
+              
             - name: Run Test
               run: pytest
               shell: bash
