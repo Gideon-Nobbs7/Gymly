@@ -1,0 +1,28 @@
+name: Integrating Workflow
+
+on:
+    pull_request:
+        branches: [main]
+    push:
+        branches: [main]
+    workflow_dispatch:
+
+jobs:
+    lint:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Setup Env
+              uses: ./.github/actions/setup-env
+            - name: Run Lint
+              run: ruff check --fix
+              shell: bash
+    
+    test:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Setup Env
+              uses: ./.github/actions/setup-env
+            - name: Run Test
+              run: pytest
+              shell: bash
+

@@ -1,10 +1,9 @@
-import uuid
 
 from fastapi import APIRouter, Depends, status
 
 from app.core.core import MembershipStatus
 from app.repository.members import MemberRepository
-from app.schemas.members import Member, MemberCreate, MemberUpdate
+from app.schemas.members import Member, MemberCreate
 
 router = APIRouter(prefix="/members", tags=["Members"])
 

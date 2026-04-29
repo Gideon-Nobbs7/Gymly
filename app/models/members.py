@@ -1,4 +1,3 @@
-import enum
 
 from sqlalchemy import Boolean, Column, Date, Enum, String
 from sqlalchemy.orm import relationship

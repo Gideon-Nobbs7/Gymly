@@ -6,7 +6,7 @@ from datetime import date, timedelta
 
 from sqlalchemy.orm import Session
 
-from app.core.core import (PLAN_DURATION, MembershipStatus, PaymentType,
+from app.core.core import (MembershipStatus, PaymentType,
                            PlanType)
 from app.core.exceptions import PlanResolverError
 from app.models.members import Member

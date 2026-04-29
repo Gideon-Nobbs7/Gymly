@@ -22,7 +22,7 @@ class BaseRepository:
             self.db.commit()
             self.db.refresh(query)
             return query
-        except IntegrityError as e:
+        except IntegrityError:
             self.db.rollback()
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,

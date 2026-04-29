@@ -1,7 +1,6 @@
 from datetime import date, timedelta
 from unittest.mock import MagicMock
 
-import pytest
 
 from app.core.core import MembershipStatus, PlanType
 from app.models.members import Member
