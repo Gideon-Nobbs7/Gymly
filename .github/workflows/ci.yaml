@@ -12,7 +12,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout Code
-              uses: actions/checkouut@v4
+              uses: actions/checkout@v4
 
             - name: Setup Env
               uses: ./.github/actions/setup-env
@@ -25,11 +25,11 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout Code
-              uses: actions/checkouut@v4
+              uses: actions/checkout@v4
 
             - name: Setup Env
               uses: ./.github/actions/setup-env
-              
+
             - name: Run Test
               run: pytest
               shell: bash
