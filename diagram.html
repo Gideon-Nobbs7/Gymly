@@ -1,0 +1,101 @@
+
+<div id="erd" style="padding: 0.5rem 0;"></div>
+
+<script type="module">
+import mermaid from 'https://esm.sh/mermaid@11/dist/mermaid.esm.min.mjs';
+const dark = matchMedia('(prefers-color-scheme: dark)').matches;
+await document.fonts.ready;
+mermaid.initialize({
+  startOnLoad: false,
+  theme: 'base',
+  fontFamily: '"Anthropic Sans", sans-serif',
+  themeVariables: {
+    darkMode: dark,
+    fontSize: '13px',
+    fontFamily: '"Anthropic Sans", sans-serif',
+    lineColor: dark ? '#9c9a92' : '#73726c',
+    textColor: dark ? '#c2c0b6' : '#3d3d3a',
+    primaryColor: dark ? '#2a2855' : '#EEEDFE',
+    primaryBorderColor: dark ? '#534AB7' : '#534AB7',
+    primaryTextColor: dark ? '#CECBF6' : '#3C3489',
+    secondaryColor: dark ? '#083e2d' : '#E1F5EE',
+    secondaryBorderColor: dark ? '#0F6E56' : '#0F6E56',
+    secondaryTextColor: dark ? '#9FE1CB' : '#085041',
+    tertiaryColor: dark ? '#3b2e08' : '#FAEEDA',
+    tertiaryBorderColor: dark ? '#854F0B' : '#854F0B',
+    tertiaryTextColor: dark ? '#FAC775' : '#633806',
+    noteBkgColor: dark ? '#3b3830' : '#F1EFE8',
+    noteTextColor: dark ? '#D3D1C7' : '#444441',
+  },
+});
+
+const diagram = `
+graph TD
+  subgraph CLIENT["Client layer"]
+    UI["Dashboard / web client"]
+  end
+
+  subgraph API["API layer (REST)"]
+    R1["POST /members"]
+    R2["GET /members?status=expiring"]
+    R3["POST /payments"]
+    R4["PATCH /members/:id/status"]
+  end
+
+  subgraph CORE["Business logic"]
+    EX["Expiry engine"]
+    PL["Plan resolver"]
+    NT["Notification trigger"]
+  end
+
+  subgraph DB["Data layer"]
+    TM[("members table")]
+    TP[("payments table")]
+  end
+
+  subgraph SCHED["Background jobs"]
+    CJ["Daily cron job"]
+  end
+
+  UI --> R1
+  UI --> R2
+  UI --> R3
+  UI --> R4
+
+  R1 --> PL
+  R3 --> PL
+  R4 --> EX
+
+  PL --> TM
+  PL --> TP
+  EX --> TM
+
+  CJ --> EX
+  EX --> NT
+
+  R2 --> TM
+`;
+
+const { svg } = await mermaid.render('erd-svg', diagram);
+document.getElementById('erd').innerHTML = svg;
+
+document.querySelectorAll('#erd svg .node').forEach(node => {
+  const firstPath = node.querySelector('path[d]');
+  if (!firstPath) return;
+  const d = firstPath.getAttribute('d');
+  const nums = d.match(/-?[\d.]+/g)?.map(Number);
+  if (!nums || nums.length < 8) return;
+  const xs = [nums[0], nums[2], nums[4], nums[6]];
+  const ys = [nums[1], nums[3], nums[5], nums[7]];
+  const x = Math.min(...xs), y = Math.min(...ys);
+  const w = Math.max(...xs) - x, h = Math.max(...ys) - y;
+  const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  rect.setAttribute('x', x); rect.setAttribute('y', y);
+  rect.setAttribute('width', w); rect.setAttribute('height', h);
+  rect.setAttribute('rx', '8');
+  for (const a of ['fill', 'stroke', 'stroke-width', 'class', 'style']) {
+    if (firstPath.hasAttribute(a)) rect.setAttribute(a, firstPath.getAttribute(a));
+  }
+  firstPath.replaceWith(rect);
+});
+</script>
